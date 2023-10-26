@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article Details{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <h1 class="my-4">{{ article.title }}</h1>
+        <p>{{ article.description }}</p>
+        <a href="{{ path('app_article_list') }}" class="btn btn-primary">Back to List</a>
+    </div>
+{% endblock %}

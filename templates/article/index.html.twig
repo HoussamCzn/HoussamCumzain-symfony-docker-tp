@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}List of Articles{% endblock %}
+
+{% block main %}
+    <div class="container">
+        <h1 class="my-4">List of Articles</h1>
+        <div class="mb-4">
+            <a href="{{ path('app_article_create') }}" class="btn btn-primary">Add New Article</a>
+        </div>
+        <div class="row">
+            {% if articles is not empty %}
+                {% for article in articles %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="..." class="card-img-top" alt="Image for {{ article.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ article.title }}</h5>
+                                <p class="card-text">{{ article.description }}</p>
+                                <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-secondary">View</a>
+                                <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-primary">Edit</a>
+                                <a href="{{ path('app_article_delete', {'id': article.id}) }}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No articles found.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
