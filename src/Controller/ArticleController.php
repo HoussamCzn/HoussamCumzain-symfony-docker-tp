@@ -35,12 +35,6 @@ class ArticleController extends AbstractController
     ): Response {
         $article = new Article();
 
-        // $form = $this->createFormBuilder($article)
-        //     ->add("title", TextType::class)
-        //     ->add("description", TextType::class)
-        //     ->getForm();
-        // //dd($form);
-        // $form->handleRequest($request);
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
@@ -77,28 +71,23 @@ class ArticleController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route("/edit/{id}", name: "app_article_edit")]
     public function editArticle(
-        $id,
+        Article $article,
         Request $request,
         EntityManagerInterface $em
     ): Response {
-        $article = $em->getRepository(Article::class)->find($id);
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
 
-        if (!$article) {
-            throw $this->createNotFoundException(
-                "No article found for id " . $id
-            );
-        }
-
-        if ($request->isMethod("POST")) {
-            $article->setTitle($request->request->get("title"));
-            $article->setDescription($request->request->get("description"));
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($article);
             $em->flush();
 
             return $this->redirectToRoute("app_article_list");
         }
 
         return $this->render("article/edit.html.twig", [
-            "article" => $article,
+            'form' => $form->createView(),
+            'article' => $article,
         ]);
     }
 

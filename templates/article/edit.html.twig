@@ -4,18 +4,38 @@
 
 {% block main %}
     <div class="container">
-        <h1 class="my-4">Edit Article: {{ article.title }}</h1>
-        <form method="post">
-            <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{ article.title }}">
+        <h1 class="my-4">Edit Article: {{ form.vars.value.title }}</h1>
+        {{ form_start(form, {'attr': {'class': 'form-article'}, 'method': 'post'}) }}
+        
+        <div class="form-group">
+            {{ form_label(form.title, 'Title', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.title) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.description) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.state, 'State', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.state) }}
+        </div>
+
+        {% if form.details_filename is defined %}
+            <div class="form-group">
+                {{ form_label(form.details_filename, 'Details Filename', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.details_filename, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.details_filename) }}
             </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description">{{ article.description }}</textarea>
-            </div>
-            <button type="submit" class="btn btn-update">Update</button>
-            <a href="{{ path('app_article_list') }}" class="btn btn-secondary">Cancel</a>
-        </form>
+        {% endif %}
+
+        <button type="submit" class="btn btn-update">Update</button>
+        <a href="{{ path('app_article_list') }}" class="btn btn-secondary">Cancel</a>
+
+        {{ form_end(form, {'render_rest': false}) }}
     </div>
 {% endblock %}

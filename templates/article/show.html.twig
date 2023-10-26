@@ -6,6 +6,12 @@
     <div class="container">
         <h1 class="title-show">{{ article.title }}</h1>
         <p class="description-show">{{ article.description }}</p>
+        {% if article.state %}
+            <p><strong>State:</strong> {{ article.state }}</p>
+        {% endif %}
+        {% if article.date %}
+            <p><strong>Date:</strong> {{ article.date|date('Y-m-d') }}</p>
+        {% endif %}
         <a href="{{ path('app_article_list') }}" class="btn btn-primary">Back to List</a>
     </div>
 {% endblock %}
