@@ -20,10 +20,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ArticleController extends AbstractController
 {
     #[Route("/", name: "app_article")]
-    public function index(): Response
+    public function index(EntityManagerInterface $em): Response
     {
+        $articles = $em->getRepository(Article::class)->findAll();
+
         return $this->render("article/index.html.twig", [
-            "controller_name" => "ArticleController",
+            "articles" => $articles,
         ]);
     }
 
@@ -37,7 +39,6 @@ class ArticleController extends AbstractController
         $form = $this->createFormBuilder($article)
             ->add("title", TextType::class)
             ->add("description", TextType::class)
-            ->add("save", SubmitType::class, ["label" => "Create Article"])
             ->getForm();
         //dd($form);
         $form->handleRequest($request);
@@ -45,6 +46,8 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($article);
             $em->flush();
+
+            return $this->redirectToRoute("app_article");
         }
         return $this->render("article/create.html.twig", [
             "form" => $form->createView(),
@@ -70,7 +73,7 @@ class ArticleController extends AbstractController
             $article->setDescription($request->request->get("description"));
             $em->flush();
 
-            return $this->redirectToRoute("app_article_list");
+            return $this->redirectToRoute("app_article");
         }
 
         return $this->render("article/edit.html.twig", [
@@ -91,16 +94,6 @@ class ArticleController extends AbstractController
 
         return $this->render("article/show.html.twig", [
             "article" => $article,
-        ]);
-    }
-
-    #[Route("/list", name: "app_article_list")]
-    public function listArticles(EntityManagerInterface $em): Response
-    {
-        $articles = $em->getRepository(Article::class)->findAll();
-
-        return $this->render("article/index.html.twig", [
-            "articles" => $articles,
         ]);
     }
 
