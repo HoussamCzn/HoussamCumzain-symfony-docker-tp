@@ -19,13 +19,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ArticleController extends AbstractController
 {
     #[Route("/", name: "app_article")]
-    public function index(EntityManagerInterface $em): Response
+    public function index(): Response
     {
-        $articles = $em->getRepository(Article::class)->findAll();
-
-        return $this->render("article/index.html.twig", [
-            "articles" => $articles,
-        ]);
+        return $this->redirectToRoute("app_article_list");
     }
 
     #[Route("/create", name: "app_article_create")]
@@ -46,7 +42,7 @@ class ArticleController extends AbstractController
             $em->persist($article);
             $em->flush();
 
-            return $this->redirectToRoute("app_article");
+            return $this->redirectToRoute("app_article_list");
         }
         return $this->render("article/create.html.twig", [
             "form" => $form->createView(),
@@ -72,7 +68,7 @@ class ArticleController extends AbstractController
             $article->setDescription($request->request->get("description"));
             $em->flush();
 
-            return $this->redirectToRoute("app_article");
+            return $this->redirectToRoute("app_article_list");
         }
 
         return $this->render("article/edit.html.twig", [
@@ -96,6 +92,16 @@ class ArticleController extends AbstractController
         ]);
     }
 
+    #[Route("/list", name: "app_article_list")]
+    public function listArticles(EntityManagerInterface $em): Response
+    {
+        $articles = $em->getRepository(Article::class)->findAll();
+
+        return $this->render("article/index.html.twig", [
+            "articles" => $articles,
+        ]);
+    }
+
     #[Route("/delete/{id}", name: "app_article_delete")]
     public function deleteArticle($id, EntityManagerInterface $em): Response
     {
@@ -110,6 +116,6 @@ class ArticleController extends AbstractController
         $em->remove($article);
         $em->flush();
 
-        return $this->redirectToRoute("app_article");
+        return $this->redirectToRoute("app_article_list");
     }
 }

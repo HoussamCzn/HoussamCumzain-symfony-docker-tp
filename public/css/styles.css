@@ -4193,6 +4193,11 @@ textarea.form-control-lg {
   background-clip: border-box;
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease-in-out;
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 .card > hr {
   margin-right: 0;
@@ -4220,11 +4225,13 @@ textarea.form-control-lg {
 .card-body {
   flex: 1 1 auto;
   padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
-  color: var(--bs-card-color);
+  color: #333;
 }
 
 .card-title {
   margin-bottom: var(--bs-card-title-spacer-y);
+  color: #007bff;
+  font-weight: bold;
 }
 
 .card-subtitle {
@@ -4238,6 +4245,20 @@ textarea.form-control-lg {
 
 .card-link + .card-link {
   margin-left: var(--bs-card-spacer-x);
+}
+
+.card-link:hover,
+.btn-primary:hover,
+.btn-danger:hover,
+.btn-secondary:hover {
+    opacity: 0.8;
+}
+
+.card-link,
+.btn-primary,
+.btn-danger,
+.btn-secondary {
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s; /* Smooth transition for button and link states */
 }
 
 .card-header {
@@ -11252,8 +11273,29 @@ body {
 }
 
 .btn-primary {
-  background-color: #004085;
-  border-color: #004085;
+  background-color: #4E73DF;
+  border-color: #4E73DF;
+}
+
+.btn-danger {
+  background-color: #E74A3B;
+  border-color: #E74A3B;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.add-btn {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.add-btn:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
 }
 
 /* Error Messages */
