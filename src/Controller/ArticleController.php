@@ -2,20 +2,19 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Article;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-// Form
+use App\Entity\Article;
 use App\Form\ArticleType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route("/article")]
 class ArticleController extends AbstractController
@@ -23,12 +22,11 @@ class ArticleController extends AbstractController
     #[Route("/", name: "app_article")]
     public function index(): Response
     {
-        return $this->render('article/index.html.twig', [
-            'controller_name' => 'ArticleController',
+        return $this->render("article/index.html.twig", [
+            "controller_name" => "ArticleController",
         ]);
     }
 
-    //#[IsGranted('ROLE_ADMIN')]
     #[Route("/create", name: "app_article_create")]
     public function createArticle(
         Request $request,
@@ -39,7 +37,7 @@ class ArticleController extends AbstractController
         $form = $this->createFormBuilder($article)
             ->add("title", TextType::class)
             ->add("description", TextType::class)
-            ->add("save", SubmitType::class, ["label" => 'Create Article'])
+            ->add("save", SubmitType::class, ["label" => "Create Article"])
             ->getForm();
         //dd($form);
         $form->handleRequest($request);
@@ -63,7 +61,7 @@ class ArticleController extends AbstractController
 
         if (!$article) {
             throw $this->createNotFoundException(
-                'No article found for id ' . $id
+                "No article found for id " . $id
             );
         }
 
