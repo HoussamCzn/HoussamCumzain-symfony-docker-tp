@@ -2,28 +2,45 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[UniqueEntity('slug')]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => 'article:item']),
+        new GetCollection(normalizationContext: ['groups' => 'article:list'])
+    ],
+    paginationEnabled: false,
+)]
 class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article:list', 'article:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['article:list', 'article:item'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['article:list', 'article:item'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['article:list', 'article:item'])]
     private ?string $state = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    #[Groups(['article:list', 'article:item'])]
     private ?\DateTimeImmutable $date = null;
 
     public function getId(): ?int
