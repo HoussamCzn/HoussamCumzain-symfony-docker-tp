@@ -24,6 +24,7 @@ class ArticleController extends AbstractController
         return $this->redirectToRoute("app_article_list");
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route("/create", name: "app_article_create")]
     public function createArticle(
         Request $request,
@@ -49,6 +50,7 @@ class ArticleController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route("/edit/{id}", name: "app_article_edit")]
     public function editArticle(
         $id,
@@ -76,6 +78,7 @@ class ArticleController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route("/show/{id}", name: "app_article_show")]
     public function showArticle($id, EntityManagerInterface $em): Response
     {
@@ -102,6 +105,7 @@ class ArticleController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route("/delete/{id}", name: "app_article_delete")]
     public function deleteArticle($id, EntityManagerInterface $em): Response
     {
