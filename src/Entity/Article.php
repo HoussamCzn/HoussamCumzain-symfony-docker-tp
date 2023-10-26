@@ -45,6 +45,10 @@ class Article
     #[Groups(['article:list', 'article:item', 'article:write'])]
     private ?\DateTimeImmutable $date = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['article:list', 'article:item', 'article:write'])]
+    private ?string $details_filename = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -101,6 +105,18 @@ class Article
     public function setDate(?\DateTimeImmutable $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getDetailsFilename(): ?string
+    {
+        return $this->details_filename;
+    }
+
+    public function setDetailsFilename(string $details_filename): self
+    {
+        $this->details_filename = $details_filename;
 
         return $this;
     }

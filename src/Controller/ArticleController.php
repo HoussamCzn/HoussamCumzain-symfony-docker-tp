@@ -10,10 +10,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route("/article")]
 class ArticleController extends AbstractController
@@ -28,18 +30,40 @@ class ArticleController extends AbstractController
     #[Route("/create", name: "app_article_create")]
     public function createArticle(
         Request $request,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        SluggerInterface $slugger
     ): Response {
         $article = new Article();
 
-        $form = $this->createFormBuilder($article)
-            ->add("title", TextType::class)
-            ->add("description", TextType::class)
-            ->getForm();
-        //dd($form);
+        // $form = $this->createFormBuilder($article)
+        //     ->add("title", TextType::class)
+        //     ->add("description", TextType::class)
+        //     ->getForm();
+        // //dd($form);
+        // $form->handleRequest($request);
+        $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $detailsFile = $form->get('details')->getData();
+
+            if ($detailsFile) {
+                $originalFilename = pathinfo($detailsFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$detailsFile->guessExtension();
+
+                try {
+                    $detailsFile->move(
+                        $this->getParameter('details_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    return $this->redirectToRoute("app_article_list");
+                }
+
+                $article->setDetailsFilename($newFilename);
+            }
+
             $em->persist($article);
             $em->flush();
 
