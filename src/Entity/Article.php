@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: ['groups' => 'article:item']),
-        new GetCollection(normalizationContext: ['groups' => 'article:list'])
+        new GetCollection(normalizationContext: ['groups' => 'article:list']),
+        new Post(normalizationContext: ['groups' => 'article:write'])
     ],
     paginationEnabled: false,
 )]
@@ -28,19 +30,19 @@ class Article
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['article:list', 'article:item'])]
+    #[Groups(['article:list', 'article:item', 'article:write'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['article:list', 'article:item'])]
+    #[Groups(['article:list', 'article:item', 'article:write'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['article:list', 'article:item'])]
+    #[Groups(['article:list', 'article:item', 'article:write'])]
     private ?string $state = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
-    #[Groups(['article:list', 'article:item'])]
+    #[Groups(['article:list', 'article:item', 'article:write'])]
     private ?\DateTimeImmutable $date = null;
 
     public function getId(): ?int
