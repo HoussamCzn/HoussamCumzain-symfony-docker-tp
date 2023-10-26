@@ -20,7 +20,16 @@ services:
       - host.docker.internal:host-gateway
 
   caddy:
-    command: [ "caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--watch" ]
+    command:
+      [
+        "caddy",
+        "run",
+        "--config",
+        "/etc/caddy/Caddyfile",
+        "--adapter",
+        "caddyfile",
+        "--watch",
+      ]
     build:
       context: .
       target: caddy_base
@@ -30,10 +39,10 @@ services:
     environment:
       MERCURE_EXTRA_DIRECTIVES: demo
 
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
+  ###> symfony/mercure-bundle ###
+  ###< symfony/mercure-bundle ###
 
-###> doctrine/doctrine-bundle ###
+  ###> doctrine/doctrine-bundle ###
   database:
     ports:
       - "5432"
